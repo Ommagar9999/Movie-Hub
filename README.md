@@ -1,2 +1,7 @@
-# Movie-Hub
-Movie management web application using Java Spring Boot, MySQL, HTML, CSS and JavaScript.
+Features
+- Add Movie
+- Delete Movie
+- Search Movie
+- Beautiful UI
+- Exception Handling
+- REST API
