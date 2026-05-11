@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Movie Hub</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:'Poppins',sans-serif;
+        }
+
+        body{
+
+            min-height:100vh;
+
+            background:
+            linear-gradient(
+            135deg,
+            #030712,
+            #111827,
+            #1e1b4b,
+            #0f172a);
+
+            color:white;
+
+            overflow-x:hidden;
+        }
+
+        /* BACKGROUND */
+
+        body::before{
+
+            content:"";
+
+            position:fixed;
+
+            width:600px;
+            height:600px;
+
+            background:#00f5ff;
+
+            border-radius:50%;
+
+            filter:blur(200px);
+
+            top:-250px;
+            left:-150px;
+
+            opacity:0.25;
+
+            animation:move1 8s infinite alternate;
+
+            z-index:-1;
+        }
+
+        body::after{
+
+            content:"";
+
+            position:fixed;
+
+            width:500px;
+            height:500px;
+
+            background:#8b5cf6;
+
+            border-radius:50%;
+
+            filter:blur(180px);
+
+            bottom:-220px;
+            right:-150px;
+
+            opacity:0.25;
+
+            animation:move2 8s infinite alternate;
+
+            z-index:-1;
+        }
+
+        @keyframes move1{
+
+            from{
+                transform:translateX(0px);
+            }
+
+            to{
+                transform:translateX(80px);
+            }
+        }
+
+        @keyframes move2{
+
+            from{
+                transform:translateY(0px);
+            }
+
+            to{
+                transform:translateY(-80px);
+            }
+        }
+
+        /* HEADER */
+
+        .header{
+
+            width:100%;
+
+            padding:28px;
+
+            text-align:center;
+
+            font-size:42px;
+
+            font-weight:700;
+
+            letter-spacing:2px;
+
+            background:
+            rgba(255,255,255,0.05);
+
+            backdrop-filter:blur(16px);
+
+            border-bottom:
+            1px solid rgba(255,255,255,0.08);
+
+            position:sticky;
+
+            top:0;
+
+            z-index:100;
+
+            box-shadow:
+            0 8px 30px rgba(0,0,0,0.45);
+
+        }
+
+        /* CONTROLS */
+
+        .controls{
+
+            width:92%;
+
+            margin:35px auto;
+
+            padding:30px;
+
+            display:flex;
+
+            justify-content:center;
+
+            align-items:center;
+
+            flex-wrap:wrap;
+
+            gap:18px;
+
+            border-radius:30px;
+
+            background:
+            rgba(255,255,255,0.06);
+
+            backdrop-filter:blur(18px);
+
+            border:
+            1px solid rgba(255,255,255,0.08);
+
+            box-shadow:
+            0 12px 35px rgba(0,0,0,0.45);
+
+        }
+
+        /* INPUT */
+
+        input{
+
+            padding:16px 18px;
+
+            border:none;
+
+            outline:none;
+
+            border-radius:18px;
+
+            background:
+            rgba(255,255,255,0.07);
+
+            color:white;
+
+            min-width:190px;
+
+            font-size:14px;
+
+            border:
+            1px solid rgba(255,255,255,0.08);
+
+            transition:0.4s;
+
+        }
+
+        input::placeholder{
+            color:#cbd5e1;
+        }
+
+        input:focus{
+
+            border:
+            1px solid #00f5ff;
+
+            transform:
+            translateY(-3px);
+
+            box-shadow:
+            0 0 20px rgba(0,245,255,0.5);
+
+        }
+
+        /* BUTTON */
+
+        button{
+
+            padding:15px 24px;
+
+            border:none;
+
+            border-radius:18px;
+
+            color:white;
+
+            font-size:14px;
+
+            font-weight:600;
+
+            cursor:pointer;
+
+            transition:0.4s;
+
+        }
+
+        /* MAIN BUTTON */
+
+        .main-btn{
+
+            background:
+            linear-gradient(
+            135deg,
+            #06b6d4,
+            #8b5cf6);
+
+            box-shadow:
+            0 10px 25px rgba(6,182,212,0.35);
+
+        }
+
+        .main-btn:hover{
+
+            transform:
+            translateY(-5px)
+            scale(1.05);
+
+            box-shadow:
+            0 14px 35px rgba(6,182,212,0.5);
+
+        }
+
+        /* DELETE BUTTON */
+
+        .delete-btn{
+
+            width:100%;
+
+            margin-top:18px;
+
+            background:
+            linear-gradient(
+            135deg,
+            #f43f5e,
+            #ef4444);
+
+            box-shadow:
+            0 10px 25px rgba(244,63,94,0.35);
+
+        }
+
+        .delete-btn:hover{
+
+            transform:
+            translateY(-4px);
+
+            box-shadow:
+            0 14px 35px rgba(244,63,94,0.5);
+
+        }
+
+        /* MOVIE GRID */
+
+        .movies{
+
+            width:92%;
+
+            margin:auto;
+
+            display:grid;
+
+            grid-template-columns:
+            repeat(auto-fit,minmax(300px,1fr));
+
+            gap:30px;
+
+            padding-bottom:40px;
+        }
+
+        /* CARD */
+
+        .card{
+
+            position:relative;
+
+            overflow:hidden;
+
+            padding:30px;
+
+            border-radius:32px;
+
+            background:
+            rgba(255,255,255,0.06);
+
+            border:
+            1px solid rgba(255,255,255,0.08);
+
+            backdrop-filter:blur(18px);
+
+            transition:0.5s;
+
+            box-shadow:
+            0 15px 35px rgba(0,0,0,0.45);
+
+            animation:fadeUp 0.7s ease;
+
+        }
+
+        .card::before{
+
+            content:"";
+
+            position:absolute;
+
+            width:350px;
+            height:350px;
+
+            background:
+            radial-gradient(circle,
+            rgba(255,255,255,0.18),
+            transparent 70%);
+
+            top:-200px;
+            left:-200px;
+
+            transition:0.7s;
+
+        }
+
+        .card:hover::before{
+
+            top:-80px;
+            left:120px;
+
+        }
+
+        .card:hover{
+
+            transform:
+            translateY(-12px)
+            scale(1.03);
+
+            border:
+            1px solid rgba(0,245,255,0.3);
+
+            box-shadow:
+            0 20px 45px rgba(0,0,0,0.6);
+
+        }
+
+        /* TEXT */
+
+        .card h2{
+
+            font-size:30px;
+
+            margin-bottom:18px;
+
+            color:white;
+        }
+
+        .card p{
+
+            margin:12px 0;
+
+            color:#dbeafe;
+
+            font-size:15px;
+        }
+
+        .rating{
+
+            color:#facc15;
+
+            font-weight:700;
+        }
+
+        /* ALERT */
+
+        .alert-box{
+
+            position:fixed;
+
+            top:40px;
+            right:40px;
+
+            min-width:320px;
+
+            padding:18px 25px;
+
+            border-radius:20px;
+
+            color:white;
+
+            font-size:15px;
+
+            font-weight:600;
+
+            z-index:9999;
+
+            opacity:0;
+
+            visibility:hidden;
+
+            transform:
+            translateX(120px);
+
+            transition:0.5s;
+
+            backdrop-filter:blur(15px);
+
+            border:
+            1px solid rgba(255,255,255,0.1);
+
+            box-shadow:
+            0 15px 35px rgba(0,0,0,0.4);
+
+        }
+
+        .success{
+
+            background:
+            linear-gradient(
+            135deg,
+            rgba(34,197,94,0.9),
+            rgba(22,163,74,0.9));
+
+        }
+
+        .error{
+
+            background:
+            linear-gradient(
+            135deg,
+            rgba(244,63,94,0.9),
+            rgba(220,38,38,0.9));
+
+        }
+
+        .show-alert{
+
+            opacity:1;
+
+            visibility:visible;
+
+            transform:
+            translateX(0);
+
+        }
+
+        /* ANIMATION */
+
+        @keyframes fadeUp{
+
+            from{
+
+                opacity:0;
+
+                transform:
+                translateY(40px);
+
+            }
+
+            to{
+
+                opacity:1;
+
+                transform:
+                translateY(0);
+
+            }
+        }
+
+        /* SCROLLBAR */
+
+        ::-webkit-scrollbar{
+            width:10px;
+        }
+
+        ::-webkit-scrollbar-track{
+            background:#0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb{
+
+            background:
+            linear-gradient(
+            #06b6d4,
+            #8b5cf6);
+
+            border-radius:20px;
+        }
+
+        /* RESPONSIVE */
+
+        @media(max-width:700px){
+
+            .header{
+                font-size:30px;
+            }
+
+            .controls{
+                padding:20px;
+            }
+
+            input{
+                width:100%;
+            }
+
+            button{
+                width:100%;
+            }
+
+            .alert-box{
+
+                right:20px;
+                left:20px;
+
+                min-width:auto;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="header">
+    🎬 Movie Hub
+</div>
+
+<div id="alertBox" class="alert-box"></div>
+
+<div class="controls">
+
+    <input type="text"
+           id="search"
+           placeholder="Search Movie">
+
+    <button class="main-btn"
+            onclick="searchMovie()">
+
+        Search
+
+    </button>
+
+    <input type="text"
+           id="name"
+           placeholder="Movie Name">
+
+    <input type="text"
+           id="genre"
+           placeholder="Genre">
+
+    <input type="number"
+           id="rating"
+           placeholder="Rating">
+
+    <input type="number"
+           id="year"
+           placeholder="Release Year">
+
+    <input type="text"
+           id="language"
+           placeholder="Language">
+
+    <button class="main-btn"
+            onclick="addMovie()">
+
+        Add Movie
+
+    </button>
+
+    <button class="main-btn"
+            onclick="loadMovies()">
+
+        Refresh
+
+    </button>
+
+</div>
+
+<div id="movies" class="movies"></div>
+
+<script>
+
+    const API =
+    "http://localhost:4040/movies";
+
+    /* ALERT */
+
+    function showAlert(message,type){
+
+        let alertBox =
+        document.getElementById("alertBox");
+
+        alertBox.innerText = message;
+
+        alertBox.className =
+        "alert-box show-alert " + type;
+
+        setTimeout(() => {
+
+            alertBox.classList.remove("show-alert");
+
+        },2500);
+    }
+
+    /* LOAD MOVIES */
+
+    function loadMovies(){
+
+        fetch(API)
+
+        .then(response => {
+
+            if(!response.ok){
+
+                throw new Error(
+                "Failed To Load Movies");
+            }
+
+            return response.json();
+        })
+
+        .then(data => {
+
+            displayMovies(data);
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+            error.message,
+            "error");
+        });
+    }
+
+    /* SEARCH */
+
+    function searchMovie(){
+
+        let name =
+        document.getElementById("search").value;
+
+        if(name === ""){
+
+            showAlert(
+            "Enter Movie Name",
+            "error");
+
+            return;
+        }
+
+        fetch(API + "/search?name=" + name)
+
+        .then(response => {
+
+            if(!response.ok){
+
+                throw new Error(
+                "Movie Not Found");
+            }
+
+            return response.json();
+        })
+
+        .then(data => {
+
+            if(data.length === 0){
+
+                showAlert(
+                "Movie Not Found",
+                "error");
+
+                return;
+            }
+
+            displayMovies(data);
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+            error.message,
+            "error");
+        });
+    }
+
+    /* ADD MOVIE */
+
+    function addMovie(){
+
+        let movie = {
+
+            name:
+            document.getElementById("name").value,
+
+            genre:
+            document.getElementById("genre").value,
+
+            rating:
+            document.getElementById("rating").value,
+
+            year:
+            document.getElementById("year").value,
+
+            language:
+            document.getElementById("language").value
+        };
+
+        if(movie.name === "" ||
+           movie.genre === "" ||
+           movie.rating === "" ||
+           movie.year === "" ||
+           movie.language === ""){
+
+            showAlert(
+            "Fill All Fields",
+            "error");
+
+            return;
+        }
+
+        fetch(API,{
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify(movie)
+
+        })
+
+        .then(response => {
+
+            if(!response.ok){
+
+                throw new Error(
+                "Movie Add Failed");
+            }
+
+            return response.json();
+        })
+
+        .then(data => {
+
+            showAlert(
+            "Movie Added Successfully",
+            "success");
+
+            loadMovies();
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+            error.message,
+            "error");
+        });
+    }
+
+    /* DELETE MOVIE */
+
+    function deleteMovie(id){
+
+        fetch(API + "/" + id,{
+
+            method:"DELETE"
+
+        })
+
+        .then(response => {
+
+            if(!response.ok){
+
+                throw new Error(
+                "Movie Delete Failed");
+            }
+
+            return response.text();
+        })
+
+        .then(data => {
+
+            showAlert(
+            data,
+            "success");
+
+            loadMovies();
+
+        })
+
+        .catch(error => {
+
+            showAlert(
+            error.message,
+            "error");
+        });
+    }
+
+    /* DISPLAY */
+
+    function displayMovies(movies){
+
+        let container =
+        document.getElementById("movies");
+
+        container.innerHTML = "";
+
+        movies.forEach(movie => {
+
+            let div =
+            document.createElement("div");
+
+            div.className = "card";
+
+            div.innerHTML = `
+
+                <h2>🎥 ${movie.name}</h2>
+
+                <p>🎭 Genre : ${movie.genre}</p>
+
+                <p class="rating">
+                ⭐ Rating : ${movie.rating}
+                </p>
+
+                <p>📅 Year : ${movie.year}</p>
+
+                <p>🌎 Language : ${movie.language}</p>
+
+                <button class="delete-btn"
+                onclick="deleteMovie(${movie.id})">
+
+                    Delete Movie
+
+                </button>
+
+            `;
+
+            container.appendChild(div);
+        });
+    }
+
+    loadMovies();
+
+</script>
+
+</body>
+</html>
